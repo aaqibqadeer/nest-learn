@@ -7,12 +7,13 @@ import {
   Delete,
   Param,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './interfaces/user.interface';
 
 @Controller('users')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private userService: UsersService) {}
 
   // @Get()
   // getHello(): string {
@@ -20,12 +21,14 @@ export class AppController {
   // }
 
   @Get()
-  getAll(): string {
-    return 'All users are returned';
+  getAll(): User[] {
+    return this.userService.getAll();
   }
 
   @Post()
   add(@Body() body: CreateUserDto): string {
+    const newUser = { name: body.name };
+    this.userService.add(newUser);
     return `User ${body.name} is added`;
   }
 
